@@ -1,0 +1,13 @@
+part2/results/
+part2/bin/
+part2/paper/
+part2/figures/
+part2/screenshots/
+__pycache__/
+m5out/
+core
+core.*
+*.pdf
+*.docx
+*.png
+*.zip

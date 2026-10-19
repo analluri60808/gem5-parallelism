@@ -1,0 +1,26 @@
+diff --git a/src/cpu/pred/bpred_unit.cc b/src/cpu/pred/bpred_unit.cc
+index db485a7409..ce638f37ad 100644
+--- a/src/cpu/pred/bpred_unit.cc
++++ b/src/cpu/pred/bpred_unit.cc
+@@ -43,6 +43,7 @@
+ #include "cpu/pred/bpred_unit.hh"
+ 
+ #include <algorithm>
++#include <cstdlib>
+ 
+ #include "arch/generic/pcstate.hh"
+ #include "base/compiler.hh"
+@@ -96,6 +97,13 @@ bool
+ BPredUnit::predict(const StaticInstPtr &inst, const InstSeqNum &seqNum,
+                    PCStateBase &pc, ThreadID tid)
+ {
++    // Assignment experiment: skip predictor lookup and training entirely.
++    static const bool ilpBypass = std::getenv("GEM5_ILP_DISABLE_BP") != nullptr;
++    if (ilpBypass) {
++        inst->advancePC(pc);
++        return false;
++    }
++
+     /** Perform the prediction. */
+     PredictorHistory* bpu_history = nullptr;
+     bool taken  = predict(inst, seqNum, pc, tid, bpu_history);
